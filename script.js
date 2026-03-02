@@ -43,13 +43,35 @@ function loadCards() {
   for (const card of cardsArray) {
     createCard(card);
   }
+  document.querySelector(".card").classList.add("active");
   totalCards = cardsArray.length;
-  currentCard = !currentCard ? 1 : currentCard;
+  currentCard = 1;
   current.textContent = `${currentCard} / ${totalCards}`;
+}
+
+function displayNextCard() {
   document.querySelectorAll(".card").forEach((card, idx) => {
-    if (idx + 1 < currentCard) return card.classList.add("left");
-    if (idx + 1 === currentCard) return card.classList.add("active");
+    if (card.classList.contains("active")) {
+      card.classList.remove("active");
+      card.classList.add("left");
+    }
+    if (idx + 1 === currentCard) {
+      card.classList.add("active");
+    }
   });
+  current.textContent = `${currentCard} / ${totalCards}`;
+}
+
+function displayPreviousCard() {
+  document.querySelectorAll(".card").forEach((card, idx) => {
+    if (idx + 1 === currentCard) {
+      card.classList.remove("left");
+      card.classList.add("active");
+    } else if (card.classList.contains("active") && idx + 1 !== currentCard) {
+      card.classList.remove("active");
+    }
+  });
+  current.textContent = `${currentCard} / ${totalCards}`;
 }
 
 // Event Listeners
@@ -74,13 +96,13 @@ addBtn.addEventListener("click", () => {
 prevBtn.addEventListener("click", () => {
   if (currentCard === 1) return;
   currentCard--;
-  loadCards();
+  displayPreviousCard();
 });
 
 nextBtn.addEventListener("click", () => {
   if (currentCard === cardsArray.length) return;
   currentCard++;
-  loadCards();
+  displayNextCard();
 });
 
 clearBtn.addEventListener("click", () => {
