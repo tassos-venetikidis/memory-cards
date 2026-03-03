@@ -17,8 +17,11 @@ function saveCard() {
   };
   cardsArray.push(card);
   localStorage.setItem("cards", JSON.stringify(cardsArray));
+  totalCards++;
   currentCard = cardsArray.length;
-  loadCards();
+  createCard(card);
+  cardsContainer.lastElementChild.classList.add("active");
+  current.textContent = `${currentCard} / ${totalCards}`;
 }
 
 function createCard(cardObj) {
@@ -39,11 +42,10 @@ function createCard(cardObj) {
 
 function loadCards() {
   if (!cardsArray || cardsArray.length === 0) return (cardsArray = []);
-  cardsContainer.innerHTML = "";
   for (const card of cardsArray) {
     createCard(card);
   }
-  document.querySelector(".card").classList.add("active");
+  document.querySelectorAll(".card")[0].classList.add("active");
   totalCards = cardsArray.length;
   currentCard = 1;
   current.textContent = `${currentCard} / ${totalCards}`;
